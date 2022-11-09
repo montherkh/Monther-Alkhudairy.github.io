@@ -1,0 +1,54 @@
+/* Query 1 */
+SELECT c.CustomerId,
+       c.FirstName,
+       c.LastName,
+       sum(i.total) AS purchases
+FROM customer c
+JOIN invoice i ON c.CustomerId = i.CustomerId
+GROUP BY 1,
+         2,
+         3
+ORDER BY 4 DESC;
+
+/* Query 2 */
+SELECT a.ArtistId,
+       a.name,
+       count(*) AS Songs
+FROM artist a
+JOIN album al ON a.ArtistId = al.ArtistId
+JOIN track t ON al.AlbumId = t.AlbumId
+JOIN genre g ON t.GenreId = g.GenreId
+WHERE g.name = "Rock"
+GROUP BY 1,
+         2
+ORDER BY 3 DESC;
+
+/* Query 3 */
+SELECT a.name,
+       sum(il.unitprice * il.Quantity) AS AmountSpent
+FROM artist a
+JOIN album al ON a.ArtistId = al.ArtistId
+JOIN track t ON al.AlbumId = t.AlbumId
+JOIN InvoiceLine il ON t.TrackId = il.TrackId
+WHERE a.name = "Iron Maiden"
+GROUP BY 1
+ORDER BY 2 DESC;
+
+/* Query 4 */
+SELECT a.name,
+       sum(il.unitprice * il.Quantity) AS AmountSpent,
+       c.CustomerId,
+       c.FirstName,
+       c.LastName
+FROM artist a
+JOIN album al ON a.ArtistId = al.ArtistId
+JOIN track t ON al.AlbumId = t.AlbumId
+JOIN InvoiceLine il ON t.TrackId = il.TrackId
+JOIN invoice i ON il.InvoiceId = i.InvoiceId
+JOIN customer c ON i.CustomerId = c.CustomerId
+WHERE a.name = "Iron Maiden"
+GROUP BY 3,
+         4,
+         5,
+         1
+ORDER BY 2 DESC;
